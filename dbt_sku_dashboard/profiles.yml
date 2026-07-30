@@ -1,0 +1,12 @@
+sku_dashboard:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('POSTGRES_HOST', 'localhost') }}"
+      port: "{{ env_var('POSTGRES_PORT', '5432') | int }}"
+      user: "{{ env_var('POSTGRES_USER', 'analytics') }}"
+      password: "{{ env_var('POSTGRES_PASSWORD', 'changeme') }}"
+      dbname: "{{ env_var('POSTGRES_DB', 'catalog') }}"
+      schema: analytics
+      threads: 4

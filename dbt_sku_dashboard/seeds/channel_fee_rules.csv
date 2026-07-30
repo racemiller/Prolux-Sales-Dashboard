@@ -1,0 +1,11 @@
+channel,fee_method,fee_pct,flat_fee,channel_pays_shipping
+Amazon,from_actuals,0,0,false
+eBay,from_actuals,0,0,false
+Walmart,from_actuals,0,0,false
+Website,computed_pct_flat,0.024,0.30,false
+Home Depot,wholesale_none,0,0,true
+Lowe's,wholesale_none,0,0,true
+Overstock,wholesale_none,0,0,true
+Local Store,none,0,0,false
+Target,from_actuals,0,0,false
+Other,none,0,0,false

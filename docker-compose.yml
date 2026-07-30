@@ -1,0 +1,80 @@
+services:
+  db:
+    networks:
+      - catalog-network
+    container_name: catalog-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-analytics}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: ${POSTGRES_DB:-catalog}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-analytics} -d ${POSTGRES_DB:-catalog}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  # Lightweight web UI to browse the database at http://localhost:8080
+  adminer:
+    networks:
+      - catalog-network
+    container_name: catalog-adminer
+    image: adminer
+    ports:
+      - "8282:8080"
+
+  metabase-db:
+    networks:
+      - catalog-network
+    container_name: metabase-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: metabase
+      POSTGRES_PASSWORD: ${MB_DB_PASSWORD:-metabase_change_me}
+      POSTGRES_DB: metabaseapp
+    volumes:
+      - metabase_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U metabase -d metabaseapp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  metabase:
+    networks:
+      - catalog-network
+    container_name: metabase
+    image: metabase/metabase:latest
+    ports:
+      - "3005:3000"
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_HOST: metabase-db
+      MB_DB_PORT: 5432
+      MB_DB_DBNAME: metabaseapp
+      MB_DB_USER: metabase
+      MB_DB_PASS: ${MB_DB_PASSWORD:-metabase_change_me}
+    depends_on:
+      metabase-db:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-I", "http://localhost:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+
+networks:
+  catalog-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+  metabase_db_data:

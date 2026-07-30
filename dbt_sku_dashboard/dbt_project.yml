@@ -1,0 +1,22 @@
+name: sku_dashboard
+version: "1.0.0"
+config-version: 2
+profile: sku_dashboard
+model-paths: ["models"]
+seed-paths: ["seeds"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+vars:
+  excluded_order_status_codes: []
+models:
+  sku_dashboard:
+    staging: {+materialized: view}
+    intermediate: {+materialized: view}
+    marts: {+materialized: table}
+seeds:
+  sku_dashboard:
+    +quote_columns: false
+    channel_map:
+      +column_types: {order_source: integer, company_id: text, channel: text}
+    channel_fee_rules:
+      +column_types: {fee_pct: "numeric(10,4)", flat_fee: "numeric(12,2)"}

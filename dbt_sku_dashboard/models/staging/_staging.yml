@@ -1,0 +1,10 @@
+version: 2
+models:
+  - name: stg_sellercloud_orders
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+  - name: stg_sellercloud_order_items
+    columns:
+      - name: order_item_id
+        tests: [not_null, unique]
