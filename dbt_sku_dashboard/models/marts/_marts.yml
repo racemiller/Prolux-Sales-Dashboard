@@ -1,19 +1,12 @@
 version: 2
 models:
-  - name: fct_sku_channel
-    description: SKU x channel grain. Sales, avg fee, avg shipping per channel.
-    columns:
-      - name: sku_channel
-        tests: [not_null, unique]
   - name: fct_sku_profit
+    description: All-time profit per canonical SKU, with net/gross/MSRP margin denominators.
     columns:
       - name: sku
         tests: [not_null, unique]
-  - name: fct_sku_profit_monthly
+  - name: fct_sku_cost_watch
+    description: Forward-looking pricing signal. Compares cost-at-sale to current LastCost; flags margin erosion.
     columns:
-      - name: sku_month
-        tests: [not_null, unique]
-  - name: fct_order_item_profit
-    columns:
-      - name: order_item_id
+      - name: sku
         tests: [not_null, unique]

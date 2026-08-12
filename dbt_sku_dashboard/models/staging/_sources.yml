@@ -2,5 +2,4 @@ version: 2
 sources:
   - name: raw
     schema: raw
-    tables:
-      - name: sellercloud_orders
+    tables: [{name: sellercloud_orders}, {name: sellercloud_catalog}, {name: jotform_returns}]

@@ -4,6 +4,7 @@ services:
       - catalog-network
     container_name: catalog-db
     image: postgres:16
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-analytics}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
@@ -18,13 +19,14 @@ services:
       timeout: 5s
       retries: 5
 
-
-  # Lightweight web UI to browse the database at http://localhost:8080
   adminer:
     networks:
       - catalog-network
     container_name: catalog-adminer
     image: adminer
+    restart: unless-stopped
+    depends_on:
+      - db
     ports:
       - "8282:8080"
 
@@ -33,6 +35,7 @@ services:
       - catalog-network
     container_name: metabase-db
     image: postgres:16
+    restart: unless-stopped
     environment:
       POSTGRES_USER: metabase
       POSTGRES_PASSWORD: ${MB_DB_PASSWORD:-metabase_change_me}
@@ -50,6 +53,7 @@ services:
       - catalog-network
     container_name: metabase
     image: metabase/metabase:latest
+    restart: unless-stopped
     ports:
       - "3005:3000"
     environment:

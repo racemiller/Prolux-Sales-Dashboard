@@ -8,3 +8,10 @@ models:
     columns:
       - name: order_item_id
         tests: [not_null, unique]
+  - name: stg_jotform_returns
+    description: One row per (return submission, SKU). Disposition-categorized, cost-allocated, canonical-SKU matched.
+    columns:
+      - name: return_line_id
+        tests: [not_null, unique]
+      - name: sku
+        tests: [not_null]
